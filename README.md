@@ -75,33 +75,33 @@ const [password, setPassword] = useState("");
 
 O creando nuestro propio Hook - useForm
 
-```
-    import { useState } from "react";
+```javascript
+import { useState } from "react";
 
-    const useForm = initialValues => {
-        const [values, setValues] = useState(initialValues);
+const useForm = initialValues => {
+    const [values, setValues] = useState(initialValues);
 
-        return [
-            values,
-            e => {
-                setValues({
-                    ...values,
-                    [e.target.name]: e.target.value
-                });
-            }
-        ];
-    };
+    return [
+        values,
+        e => {
+            setValues({
+                ...values,
+                [e.target.name]: e.target.value
+            });
+        }
+    ];
+};
 
-    export default useForm;
+export default useForm;
 ```
 
 Entonces:
 
-```
-    const [values, handleChange] = useForm({ email: "", password: "" });
+```javascript
+const [values, handleChange] = useForm({ email: "", password: "" });
 ```
 
-```
+```javascript
     						<input
                     name="email"
                     type="text"
