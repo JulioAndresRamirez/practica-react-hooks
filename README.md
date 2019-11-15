@@ -43,6 +43,11 @@ const [count2, setCount2] = useState(20);
 
 ---
 
+**Nota**: Podemos pasar un funcion a useState para casos en los que el valor
+inicial se obtiene de un calculo costoso.
+
+---
+
 ## CUSTOM HOOKS
 
 Podemos crear nuestros propios Hooks
