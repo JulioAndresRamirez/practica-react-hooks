@@ -1,89 +1,146 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useForm from "./useForm";
+import Hello from "./Hello";
+import useFetch from "./useFetch";
 import "./App.css";
 
 const App = () => {
-    //const [{ count, count2 }, setCount] = useState({ count: 10, count2: 20 });
-    //const [count, setCount] = useState(10);
-    //const [count2, setCount2] = useState(20);
-    /* const [email, setEmail] = useState("");
-    const [password, setPassword] = useState(""); */
-    const [values, handleChange] = useForm({ email: "", password: "" });
+    const [values, handleChange] = useForm({
+        email: "",
+        password: "",
+        firstName: ""
+    });
+    const [count, setCount] = useState(
+        JSON.parse(localStorage.getItem("count"))
+    );
+
+    const { data, loading } = useFetch(`http://numbersapi.com/${count}/trivia`);
+
+    useEffect(() => {
+        localStorage.setItem("count", JSON.stringify(count));
+    }, [count]);
+
+    // const [showHello, setShowHello] = useState(true);
+
+    // useEffect(() => {
+    //     console.log("render");
+    //     const onMouseMove = e => {
+    //         console.log(e);
+    //     };
+    //     window.addEventListener("mouseover", onMouseMove);
+
+    //     return () => {
+    //         window.removeEventListener("mousemove", onMouseMove);
+    //     };
+    // });
 
     return (
         <div>
-            {/* <button
-                onClick={() => {
-                    setCount(currentState => ({
-                        ...currentState,
-                        count2: currentState.count2 + 1
-                    }));
-                }}
-            >
-                +
-            </button> */}
+            {/* <button onClick={() => setShowHello(!showHello)}>show</button> */}
+            {/* {showHello ? <Hello /> : ""} */}
+            {/*showHello && <Hello /> */}
 
-            {/* <button
+            <div>{!data ? "Loading..." : data}</div>
+            <div> Count: {count}</div>
+            <button
                 onClick={() => {
                     setCount(c => c + 1);
-                    setCount2(c => c + 1);
                 }}
             >
-                +
-            </button> */}
-            {/* <div> Count 1: {count}</div>
-            <div> Count 2: {count2}</div> */}
-
-            <input
-                name="email"
-                type="text"
-                value={values.email}
-                placeholder="Email"
-                onChange={handleChange}
-            />
-            <input
-                name="password"
-                type="password"
-                value={values.password}
-                placeholder="Password"
-                onChange={handleChange}
-            />
+                increment
+            </button>
+            <form>
+                <input
+                    name="email"
+                    type="text"
+                    value={values.email}
+                    placeholder="Email"
+                    onChange={handleChange}
+                />
+                <input
+                    name="password"
+                    type="password"
+                    value={values.password}
+                    placeholder="Password"
+                    onChange={handleChange}
+                />
+                <input
+                    name="firstName"
+                    type="text"
+                    value={values.firstName}
+                    placeholder="FirstName"
+                    onChange={handleChange}
+                />
+            </form>
         </div>
     );
 };
 
-//setState
-
+//useEffect
 /*
-const [value, setValue] = setState(5);
 
-Es la nueva forma de trabajar con estados en ReactJS. sustituyendo los componenetes basados en clases.
-Esra funcion retorna un array con dos valores
+Fundamentos
 
-El primer valor es la variable y valor que representa el estado. (value)
-El segundo valor es un funcion que permite actualizar el estado. (setValue)
+useEffect reibe una funcion en su interior. Cada vez que el componete se renderiza se ejecuta useEffect
+Además useEffect cuando como didMount, didUpdate, willUnmount. 
 
-Nota: A setValue() podemos entregarle una funcion siendo el primer parametro el valor actual del estado.
+useEffect(() => {
+        console.log("render");
+    });
 
-setValue(c => console.log(c)) // c = valor actual del estado.
+Nota: Podemos añadir mas de un useEffect()
+
+useEffect(() => {
+    console.log("Mount1");
+});
+useEffect(() => {
+    console.log("Mount2");
+});
+
+Podemos añadir dependencias a nuestro useEffect para que no solo se ejecute en cada renderizado 
+si no tambien cuando un valor cambie.
+
+useEffect(() => {
+        console.log("render");
+    }, [deps]);
+
+Nota:
+Podemos dejar las [deps] vacias y el useEffect se ejecutara una vez durante el ciclo de vida del componente.
+
+useEffect(() => {
+        console.log("render");
+        
+    }, []);
 
 
-Nota: Puedes crear varios estados (No hay limite de uso para el useState) o tambien
-puede crear un estado basado en un objeto
+Para limpiar o generar el willUnmount de useEffect tenemos que hacer que retorne
+una funcion que se ejecutara antes que el componente se destruya.
 
-Estado basado en objeto
-const [{ count, count2 }, setCount] = useState({ count: 10, count2: 20 });
+useEffect(() => {
+        console.log("render");
 
-Estados separados
-const [count, setCount] = useState(10);
-const [count2, setCount2] = useState(20);
+        return () => {
+            console.log("unmount");
+        };
+    }, []);
+
+Si colocamos deps dentro de los array, igualmente el return se ejecutara.
+
+Nota: Podemos usas esta funcion para limipiar listeners. Ej:
 
 
-CUSTOM HOOKS
-Podemos crear nuestros propios Hooks
-Como regla estos deben empezar con la palabra "use"
+useEffect(() => {
+        console.log("render");
+        const onMouseMove = e => {
+            console.log(e);
+        };
+        window.addEventListener("mouseover", onMouseMove);
 
-
+        return () => {
+            console.log("unmount");
+            window.removeEventListener("mousemove", onMouseMove);
+        };
+    });
 */
 
 export default App;
