@@ -4,8 +4,8 @@
 
 Es la nueva forma de trabajar con estados en ReactJS. sustituyendo los componenetes basados en clases.
 
-```
-    const [value, setValue] = setState(5);
+```javascript
+const [value, setValue] = setState(5);
 ```
 
 Esta funcion retorna un array con dos valores
@@ -17,8 +17,8 @@ Esta funcion retorna un array con dos valores
 
 **Nota**: A `setValue()` podemos entregarle una funcion siendo el primer parametro el valor actual del estado.
 
-```
-    setValue(c => console.log(c)) // c = valor actual del estado.
+```javascript
+setValue(c => console.log(c)); // c = valor actual del estado.
 ```
 
 ---
@@ -29,16 +29,16 @@ puede crear un estado basado en un objeto.
 
 Estado basado en objeto:
 
-```
-    const [{ count, count2 }, setCount] = useState({ count: 10, count2: 20 });
+```javascript
+const [{ count, count2 }, setCount] = useState({ count: 10, count2: 20 });
 ```
 
 Estados separados:
 
-```
-    const [count, setCount] = useState(10);
+```javascript
+const [count, setCount] = useState(10);
 
-    const [count2, setCount2] = useState(20);
+const [count2, setCount2] = useState(20);
 ```
 
 ---
@@ -51,12 +51,12 @@ Como regla estos deben empezar con la palabra "use"
 
 Tenemos este manejo de estado de un formulario simple:
 
-```
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+```javascript
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
 ```
 
-```
+```javascript
     						<input
                     name="email"
                     type="text"
