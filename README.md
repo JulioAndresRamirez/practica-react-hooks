@@ -1,6 +1,6 @@
 # React
 
-# setState
+# useState
 
 Es la nueva forma de trabajar con estados en ReactJS. sustituyendo los componenetes basados en clases.
 
