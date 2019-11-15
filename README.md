@@ -4,8 +4,8 @@
 
 #### En el interior de cada rama el `README.md`contiene un breve explicacion sobre el hook estudiado.
 
-⋅⋅* [Rama - useState](https://github.com/JulioAndresRamirez/practica-react-hooks/tree/useState)
-⋅⋅* [Rama - useEffect](https://github.com/JulioAndresRamirez/practica-react-hooks/tree/useEffect)
+* [Rama - useState](https://github.com/JulioAndresRamirez/practica-react-hooks/tree/useState)
+* [Rama - useEffect](https://github.com/JulioAndresRamirez/practica-react-hooks/tree/useEffect)
 
 ###### Pronto nuevas ramas.
 
