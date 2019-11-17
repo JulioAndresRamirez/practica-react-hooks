@@ -5,7 +5,7 @@
 Es la nueva forma de trabajar con estados en ReactJS. sustituyendo los componenetes basados en clases.
 
 ```javascript
-const [value, setValue] = setState(5);
+const [value, setValue] = useState(5);
 ```
 
 Esta funcion retorna un array con dos valores
