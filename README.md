@@ -1,81 +1,46 @@
-# useEffect
+# useRef()
 
-### Fundamentos
+`useRef()` devuelve un objeto ref mutable cuya propiedad `.current` se inicializa con el argumento pasado `(initialValue)`. El objeto devuelto se mantendrá persistente durante la vida completa del componente.
 
-`useEffect()` recibe una funcion en su interior. Cada vez que el componete se renderiza se ejecuta `useEffect()`
-
-Además `useEffect()` cuenta como `componentDidMount`, `componentDidUpdate`, `componentDidUnmount`.
+**Lenguaje coloquial**: Podemos hacer referencia a cualquier cosa que tengamos en nuestro componente este aceptar objetos, DOM, valores, functions, entre otros
 
 ```javascript
-useEffect(() => {
-    console.log("render");
-});
+    const inputRef = useRef();
+
+    <input
+    	ref={inputRef} //Aqui enlazamos el input a la useRef() "inputRef"
+    	name="email"
+    	type="text"
+    	value={values.email}
+    	placeholder="Email"
+    	onChange={handleChange}
+    />
+
+
+    <button onClick={() => console.log(inputRef.current)}>
+    focus
+    </button>
+
+
+    //output
+    <input name="email" type="text" placeholder="Email" value="">
 ```
 
-**Nota**: Podemos añadir mas de un useEffect()
+**Nota**: Cuando a `useRef()` se le cambia el valor, este no generara una peticion de renderizado al componente por lo que sirve para manejar estados en los que no queramos que el componente se renderice.
 
-```javascript
-useEffect(() => {
-    console.log("Mount1");
-});
+### Utilidades:
 
-useEffect(() => {
-    console.log("Mount2");
-});
-```
+Ejemplo entregado por Ben Awad -> https://www.youtube.com/watch?v=W6AJ-gRupCs&t=1s
 
----
+Supongamos que estamos haciendo un peticion a una API en un componente que al final de hacer la peticion actualizará un estado de dicho componente lo cual hará que se renderice.
 
-Podemos añadir dependencias a nuestro `useEffect()` para que no solo se ejecute en cada renderizado
+Pero este componente fue destruido sin haber finalizado su peticion asyncrona.
 
-si no cuando un valor cambie.
+Podemos evaluar cuando el componente genere un componentWillUnmount con `useEffect()` y cambiar el valor de un `useRef(false)` a `true` (Nos indica que el componente fue destruido) cuando esta peticion finalice y vaya a utilizar el `setState()` para actualizar los datos podemos agregar una condicion antes evaluado ese `useRef()`, si es true el `setState()` no se realizara.
 
-```javascript
-useEffect(() => {
-    console.log("render");
-}, [deps]);
-```
+Con esto prevenimos errores y cambios en los estados que no queremos.
 
-**Nota**: Podemos dejar las `[deps]` vacias y el useEffect se ejecutara una vez durante el ciclo de vida del componente.
-
-```javascript
-useEffect(() => {
-    console.log("render");
-}, []);
-```
-
-Para limpiar o generar el componentWillUnmount de `useEffect()` tenemos que hacer que retorne
-
-una funcion que se ejecutará antes que el componente se destruya.
-
-```javascript
-useEffect(() => {
-    console.log("render");
-    return () => {
-        console.log("unmount");
-    };
-}, []);
-```
-
-Si colocamos deps dentro del array, igualmente el `return` se ejecutara.
-
-**Nota**: Podemos usas esta funcion para limpiar listeners.
-
-```javascript
-useEffect(() => {
-    console.log("render");
-    const onMouseMove = e => {
-        console.log(e);
-    };
-
-    window.addEventListener("mouseover", onMouseMove);
-
-    return () => {
-        console.log("unmount");
-        window.removeEventListener("mousemove", onMouseMove);
-    };
-});
-```
+:D
 
 ---
 
