@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import useForm from "./useForm";
 import Hello from "./Hello";
 import useFetch from "./useFetch";
@@ -15,31 +15,16 @@ const App = () => {
     );
 
     const { data, loading } = useFetch(`http://numbersapi.com/${count}/trivia`);
+    const inputRef = useRef();
 
     useEffect(() => {
         localStorage.setItem("count", JSON.stringify(count));
     }, [count]);
 
-    // const [showHello, setShowHello] = useState(true);
-
-    // useEffect(() => {
-    //     console.log("render");
-    //     const onMouseMove = e => {
-    //         console.log(e);
-    //     };
-    //     window.addEventListener("mouseover", onMouseMove);
-
-    //     return () => {
-    //         window.removeEventListener("mousemove", onMouseMove);
-    //     };
-    // });
+    const [showHello, setShowHello] = useState(true);
 
     return (
         <div>
-            {/* <button onClick={() => setShowHello(!showHello)}>show</button> */}
-            {/* {showHello ? <Hello /> : ""} */}
-            {/*showHello && <Hello /> */}
-
             <div>{!data ? "Loading..." : data}</div>
             <div> Count: {count}</div>
             <button
@@ -51,6 +36,7 @@ const App = () => {
             </button>
             <form>
                 <input
+                    ref={inputRef}
                     name="email"
                     type="text"
                     value={values.email}
@@ -72,75 +58,64 @@ const App = () => {
                     onChange={handleChange}
                 />
             </form>
+            <button onClick={() => console.log(inputRef.current)}>focus</button>
+            <hr />
+
+            <button onClick={() => setShowHello(!showHello)}>Show Hello</button>
+            {showHello && <Hello />}
         </div>
     );
 };
 
-//useEffect
+//useRef
 /*
 
-Fundamentos
+useRef() devuelve un objeto ref mutable cuya propiedad .current se inicializa con el argumento pasado (initialValue).
+El objeto devuelto se mantendrá persistente durante la vida completa del componente.
 
-useEffect reibe una funcion en su interior. Cada vez que el componete se renderiza se ejecuta useEffect
-Además useEffect cuando como didMount, didUpdate, willUnmount. 
+Lenguaje coloquial: Podemos hacer referencia a cualquier cosa que tengamos en nuestro componente
+este aceptar objetos, DOM, valores, functions, entre otros
 
-useEffect(() => {
-        console.log("render");
-    });
+const inputRef = useRef();
 
-Nota: Podemos añadir mas de un useEffect()
+<input
+    ref={inputRef}
+    name="email"
+    type="text"
+    value={values.email}
+    placeholder="Email"
+    onChange={handleChange}
+/>
 
-useEffect(() => {
-    console.log("Mount1");
-});
-useEffect(() => {
-    console.log("Mount2");
-});
+<button onClick={() => console.log(inputRef.current)}>
+                focus
+            </button>
 
-Podemos añadir dependencias a nuestro useEffect para que no solo se ejecute en cada renderizado 
-si no tambien cuando un valor cambie.
+// Output
 
-useEffect(() => {
-        console.log("render");
-    }, [deps]);
+<input name="email" type="text" placeholder="Email" value="">
 
-Nota:
-Podemos dejar las [deps] vacias y el useEffect se ejecutara una vez durante el ciclo de vida del componente.
-
-useEffect(() => {
-        console.log("render");
-        
-    }, []);
+Nota: Cuando a Output se le cambia el valor, este no generara una peticion de renderizado 
+al componente por lo que sirve para manejar estados en los que no queramos que el componente se renderice.
 
 
-Para limpiar o generar el willUnmount de useEffect tenemos que hacer que retorne
-una funcion que se ejecutara antes que el componente se destruya.
+Utilidades:
 
-useEffect(() => {
-        console.log("render");
+Ejemplo entregado por Ben Awad -> https://www.youtube.com/watch?v=W6AJ-gRupCs&t=1s
 
-        return () => {
-            console.log("unmount");
-        };
-    }, []);
+Supongamos que estamos haciendo un peticion a una API en un componente que al final de hacer la peticion
+actualizará un estado de dicho componente lo cual hará que se renderice. 
 
-Si colocamos deps dentro de los array, igualmente el return se ejecutara.
+Pero este componente fue destruido sin haber finalizado su peticion asyncrona.
 
-Nota: Podemos usas esta funcion para limipiar listeners. Ej:
+Podemos evaluar cuando el componente genere un componentWillUnmount con useEffect() y cambiar el valor de un 
+useRef(false) a true (Nos indica que el componente fue destruido) cuando esta peticion finalice y vaya a utilizar
+el setState() para actualizar los datos podemos agregar una condicion antes evaluado ese useRef(), si es true 
+el setState() no se realizara. 
 
+Con esto prevenimos errores y cambios en los estados que no queremos. 
 
-useEffect(() => {
-        console.log("render");
-        const onMouseMove = e => {
-            console.log(e);
-        };
-        window.addEventListener("mouseover", onMouseMove);
+:D
 
-        return () => {
-            console.log("unmount");
-            window.removeEventListener("mousemove", onMouseMove);
-        };
-    });
 */
-
 export default App;
